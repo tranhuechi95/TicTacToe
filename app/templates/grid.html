@@ -5,29 +5,18 @@
 {% endblock %}
 
 {% block main %}
-<!-- 
-<div class="container">
-  <h2>Let's start!</h2>
-  <table class="table table-bordered">
-    <tbody>
-      {% for j in range(sizes) %}
-        <tr>
-          {% for i in range(sizes) %}
-            <td></td>
-          {% endfor %}    
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div> -->
 
 <div class="grid">
+  {% for j in range(sizes) %}
     <div class="row">
-        <div class="box"><div class="inner">1</div></div>
-        <div class="box"><div class="inner">2</div></div>
-        <div class="box"><div class="inner">3</div></div>
-        <div class="box"><div class="inner">4</div></div>
-        <div class="box"><div class="inner">5</div></div>
+      {% for i in range(sizes) %}
+        <div class="box">
+          <div class="inner">
+            <button id="button" type="button" onclick="this.innerHTML = 'Stupid'"></button>
+          </div>
+        </div>
+      {% endfor %}
     </div>
+    {% endfor %}
 </div>
 {% endblock %}
