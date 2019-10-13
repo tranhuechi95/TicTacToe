@@ -1,6 +1,7 @@
 import os
 
-from flask import Flask
+from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from tempfile import mkdtemp
 
 
 def create_app(test_config=None):
@@ -25,8 +26,8 @@ def create_app(test_config=None):
         pass
 
     # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    @app.route('/')
+    def index():
+        return render_template("index.html")
 
     return app
