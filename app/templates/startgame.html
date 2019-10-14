@@ -17,7 +17,7 @@
             {% endfor %}
           </select>
         </div>
-        
+
         <div class="form-group">
           <label for="symbol">Symbol</label>
           <select class="selectpicker form-control" name="symbol" id="symbol">
@@ -28,6 +28,18 @@
           </select>
         </div>
 
+        <div class="form-group">
+          <label for="level">Difficulty levels</label>
+          <select class="selectpicker form-control" name="symbol" id="symbol">
+              <option disabled>Select</option>
+            <!-- add a for loop here to loop through all the available stock -->
+              <option>Easy</option>
+              <option>Medium</option>
+              <option>Insane</option>
+          </select>
+        </div>
+
         <button class="btn btn-primary" type="submit">Start</button>
     </form>
+
 {% endblock %}
