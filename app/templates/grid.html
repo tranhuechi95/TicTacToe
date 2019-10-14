@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Game
+{% endblock %}
+
+{% block main %}
+<h2>Let's start!</h2>
+
+<div class="grid">
+  {% for j in range(sizes) %}
+    <div class="row">
+      {% for i in range(sizes) %}
+        <div class="box">
+          <div class="inner" onclick="this.innerHTML = '{{symbol}}'">
+          </div>
+        </div>
+      {% endfor %} 
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
