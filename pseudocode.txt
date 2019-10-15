@@ -1,0 +1,28 @@
+Create 2 html file: one for easy and one for hard
+if request.form.get("level") == "easy":
+    return render_template("grideasy")
+else:
+    return render_template("gridhard")
+
+for each html, since the winning rules for 3x3, 4x4 till 10x10 are different
+we can have 2 functions: to check for 3x3 and the rest
+
+Javascript
+if {{sizes}} > 3 {
+    gamestatus(4, symbol)
+}
+else {
+    gamestatus(3, symbol)
+}
+
+Inside gamestatus(), we need the following things:
+1) To query all the adjacent cells to check for winning
+2) Query for the content of those cells for comparison
+3) When wining is confirmed-> break
+4) Return true or false and pass the symbol to the message function
+5) Have a message() function to display the result
+
+
+Inside message(), it will take in the symbol to show who win/lose
+message(true,sym)
+

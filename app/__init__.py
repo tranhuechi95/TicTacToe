@@ -41,7 +41,7 @@ def create_app(test_config=None):
             return render_template("grid.html", sizes = sizes, symbol = symbol)
 
         else:
-            sizes = [3,4,5,6,7,8,9,10] 
+            sizes = [3,4,5,6,7,8,9,10]
             return render_template("startgame.html", sizes = sizes)
 
 
