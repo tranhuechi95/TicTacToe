@@ -11,7 +11,6 @@
           <label for="size">Grid size</label>
           <select class="selectpicker form-control" name="size" id="size">
               <option disabled>Select</option>
-            <!-- add a for loop here to loop through all the available stock -->
               {% for size in sizes %}
                 <option>{{size}}</option>
             {% endfor %}
@@ -22,7 +21,6 @@
           <label for="symbol">Symbol</label>
           <select class="selectpicker form-control" name="symbol" id="symbol">
               <option disabled>Select</option>
-            <!-- add a for loop here to loop through all the available stock -->
               <option>X</option>
               <option>O</option>
           </select>
