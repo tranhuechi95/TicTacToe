@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-  Game
+  Testgame
 {% endblock %}
 
 {% block main %}
@@ -12,7 +12,7 @@
     <div class="row">
       {% for i in range(sizes) %}
         <div class="box">
-          <div class="inner" id="{{'{}'.format(j*sizes+(i))}}" onclick="playgame(this.id)"></div>
+          <div class="inner" id="{{'{}'.format(j*sizes+(i))}}" onclick="gamestatus(this.id)"></div>
         </div>
       {% endfor %}
     </div>
@@ -20,83 +20,40 @@
 </div>
 
 <script>
-var game = {
-  user: '', // for symbol
-  computer: '', // for symbol
-  moves: 1,
-};
-
-// Check which symbol to assign for user and comp
-sym = "{{symbol}}";
-if (sym === 'X') {
-  game.user = 'X';
-  game.computer = 'O';
-}
-else if (sym === 'O') {
-  game.user = 'O';
-  game.computer = 'X';
-}
-// symbol is O then computer starts first
-if (sym === 'O') {
-  compmove();
-}
-setCurrPl('user');
-function playgame(id){
-  $("#" + id).html(game.user);
-  //alert($('#' + id).html());
-  $('#' + id).removeAttr('onclick'); // i think this should be id instead of xy
-  game.moves++;
-  console.log(game.moves);
-  if (game.moves >= 5) {
-    (gamestatus(id))
-    // symbol if true and false ?
-  }
-  compmove();
-}
-function compmove() {
-  var x;
-  while (game.moves <= {{sizes**2}}) {
-  x = String(Math.floor(Math.random() * {{sizes**2}}));
-  let validmove = $('#' + x).html();
-  console.log(validmove);
-    if (validmove == "") {
-      $("#" + x).html(game.computer);
-      $('#' + x).removeAttr('onclick');
-      game.moves++;
-      console.log(game.moves);
-      break;
-    }
-    else {
-      console.log('invalid move: ' + x + ", "+ validmove);
-    }
-  }
-}
-
-  // z is the id of the cell
 function gamestatus(id) {
   var x = id % 3;
   var y = Math.floor(id / 3);
+  //var queries1 = [];
+  //var queries2 = [];
+  //var queries3 = [];
+  //var queries4 = [];
   var queries = [];
   for (var i = 0; i < 3; i++) {
   	// .push is similar to .append in python
   	// javascript does not support tuples, so need to represent as a list of lists
+  	//queries1.push([ [x-2+i,y] , [x-1+i, y] , [x+i,y] ]); // Horizontal
+  	//queries2.push([ [x,y-2+i] , [x, y-1+i] , [x,y+i] ]); // Vertical
+  	//queries3.push([ [x-2+i,y-2+i] , [x-1+i, y-1+i] , [x+i,y+i] ]); // Diagonal negative gradient
+  	//queries4.push([ [x-2+i,y+2-i] , [x-1+i, y+1-i] , [x+i,y-i] ]); // Diagonal positive gradient
   	queries.push([ [x-2+i,y] , [x-1+i, y] , [x+i,y] ], // Horizontal
   	[ [x,y-2+i] , [x, y-1+i] , [x,y+i] ], // Vertical
   	[ [x-2+i,y-2+i] , [x-1+i, y-1+i] , [x+i,y+i] ], // Diagonal negative gradient
   	[ [x-2+i,y+2-i] , [x-1+i, y+1-i] , [x+i,y-i] ]); // Diagonal positive gradient
   }
 
+	console.log("Before filter: ");
+	console.log(filter(queries));
+  //queries1 = idconvert(filter(queries1));
+  //queries2 = idconvert(filter(queries2));
+  //queries3 = idconvert(filter(queries3));
+  //queries4 = idconvert(filter(queries4));
   queries = idconvert(filter(queries));
-  console.log(queries);
+  console.log("After filter: ");
+	console.log(queries);
 
-  // for query in queries arr.forEach(function(0) {});
-  for (var j = 0; j < queries.length; j++) {
-    var check = checkcontent(queries[j]);
-    console.log("Current check: ", check);
-    if (check) {
-      alert("You win");
-    }
-  }
+	queries.forEach(function(query) { // query is a list of id of 3 cells
+  	checkcontent(query);
+  });
 }
 
 function filter(queries) {
@@ -141,14 +98,13 @@ function checkcontent(query) { // for query in queries
 	// Takes in query (id of 3 cells) to compare whether the content of each cells is the same
 	// Returns false if not matched, the symbol if the same (winning condition)
 	var val = []; // Initialize variable to store content
-	var result;
 	for (var i = 0; i < query.length; i ++) { // query.length = 3
 		val.push($('#' + query[i]).html()); // collect content from id to val
 	}
-	console.log("Check content:");
-	//console.log(query); // list query
+	console.log("Query and Values:");
+	console.log(query); // list query
 	console.log(val); // list values inside
-  result = val.reduce(function(n,m) {
+	return val.reduce(function(n,m) {
 		if (n === m) {
 			return n; // Carries over the matched symbol
 		}
@@ -156,18 +112,7 @@ function checkcontent(query) { // for query in queries
 			return false; // One false will fail the list
 		}
 	});
-	console.log("returned value:");
-	console.log(result);
-	return result;
-
 }
 </script>
-
-
 {% endblock %}
 
-For id label: {{"{}{}".format(j+1,i+1)}}
-
-y = Math.floor(Math.random() * {{sizes}}) + 1;
-
-xy = String(x) + String(y); // will return number value of xy, eg 13
