@@ -53,6 +53,7 @@ main img
     height: 80vw;
     max-height: 60vh;
     font-size: 1rem;
+    padding: 40px;
 }
 .row {
     display: flex;

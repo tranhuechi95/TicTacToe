@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Testgame
+{% endblock %}
+
+{% block main %}
+<h2>Let's start!</h2>
+
+<div class="grid">
+  {% for j in range(sizes) %}
+    <div class="row">
+      {% for i in range(sizes) %}
+        <div class="box">
+          <div class="inner" id="{{'{}'.format(j*sizes+(i))}}" onclick="gamestatus(this.id)"></div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function gamestatus(id) {
+  var x = id % 3;
+  var y = Math.floor(id / 3);
+  //var queries1 = [];
+  //var queries2 = [];
+  //var queries3 = [];
+  //var queries4 = [];
+  var queries = [];
+  wincriteria = 3;
+  winMove = wincriteria - 1;
+  //for (var i = 0; i < len; i++) {
+  //	// .push is similar to .append in python
+  //	// javascript does not support tuples, so need to represent as a list of lists
+  //	//queries1.push([ [x-2+i,y] , [x-1+i, y] , [x+i,y] ]); // Horizontal
+  //	//queries2.push([ [x,y-2+i] , [x, y-1+i] , [x,y+i] ]); // Vertical
+  //	//queries3.push([ [x-2+i,y-2+i] , [x-1+i, y-1+i] , [x+i,y+i] ]); // Diagonal negative gradient
+  //	//queries4.push([ [x-2+i,y+2-i] , [x-1+i, y+1-i] , [x+i,y-i] ]); // Diagonal positive gradient
+  //	queries.push([ [x-2+i,y] , [x-1+i, y] , [x+i,y] ], // Horizontal
+  //	[ [x,y-2+i] , [x, y-1+i] , [x,y+i] ], // Vertical
+  //	[ [x-2+i,y-2+i] , [x-1+i, y-1+i] , [x+i,y+i] ], // Diagonal negative gradient
+  //	[ [x-2+i,y+2-i] , [x-1+i, y+1-i] , [x+i,y-i] ]); // Diagonal positive gradient
+  //}
+
+  for (var i = 0; i < wincriteria; i++) {
+  	var horizontal = [];
+  	var vertical = [];
+  	var dia1 = [];
+  	var dia2 = [];
+  	for (var j = 0; j < wincriteria; j++) {
+  		horizontal.push([x-winMove+j+i,y]);
+  		vertical.push([x, y-winMove+j+i]);
+  		dia1.push([x-winMove+j+i, y-winMove+j+i]);
+  		dia2.push([x-winMove+j+i, y+winMove-j-i]);
+  	}
+
+  	queries.push(horizontal,vertical,dia1,dia2);
+
+  }
+  console.log("horizontal:",horizontal);
+  console.log("queries:", queries);
+
+//	console.log("Before filter: ");
+//	console.log(filter(queries));
+//  //queries1 = idconvert(filter(queries1));
+//  //queries2 = idconvert(filter(queries2));
+//  //queries3 = idconvert(filter(queries3));
+//  //queries4 = idconvert(filter(queries4));
+//  queries = idconvert(filter(queries));
+//  console.log("After filter: ");
+//	console.log(queries);
+//
+}
+//
+//function filter(queries) {
+//	var discard_indices = [];
+//	for (var ii = 0; ii < queries.length; ii ++) {
+//		var query = queries[ii];
+//		var flag = 1;
+//		for (var ij = 0; ij < query.length; ij ++) {
+//			// check each tuple in query1 in query
+//			if (query[ij][0] < 0 || query[ij][1] < 0 || query[ij][0] > 2 || query[ij][1] > 2) {
+//				flag = 0;
+//				break;
+//			}
+//		}
+//		if (flag === 0) {
+//			discard_indices.push(ii);
+//		}
+//
+//	}
+//	for (var ii = discard_indices.length - 1; ii >= 0; ii --) {
+//		// loop backwards so that the index in the array is intact
+//		var index = discard_indices[ii];
+//		queries.splice(index,1);
+//		// splice remove the element at position index, remove 1 element
+//	}
+//	return queries;
+//}
+//
+//function idconvert(queries) {
+//	var gridid = [];
+//	for (var i = 0; i < queries.length; i ++) {
+//		var queryid = [];
+//		for (var j = 0; j < queries[i].length; j ++){
+//			queryid.push(queries[i][j][0] + queries[i][j][1] * 3);
+//		}
+//		gridid.push(queryid);
+//	}
+//	return gridid;
+//}
+//
+//function checkcontent(query) { // for query in queries
+//	// Takes in query (id of 3 cells) to compare whether the content of each cells is the same
+//	// Returns false if not matched, the symbol if the same (winning condition)
+//	var val = []; // Initialize variable to store content
+//	for (var i = 0; i < query.length; i ++) { // query.length = 3
+//		val.push($('#' + query[i]).html()); // collect content from id to val
+//	}
+//	console.log("Query and Values:");
+//	console.log(query); // list query
+//	console.log(val); // list values inside
+//	return val.reduce(function(n,m) {
+//		if (n === m) {
+//			return n; // Carries over the matched symbol
+//		}
+//		else {
+//			return false; // One false will fail the list
+//		}
+//	});
+//}
+</script>
+{% endblock %}
+

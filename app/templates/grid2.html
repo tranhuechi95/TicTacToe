@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Game
+{% endblock %}
+
+{% block main %}
+<h2>Let's start!</h2>
+
+<div class="grid">
+  {% for j in range(sizes) %}
+    <div class="row">
+      {% for i in range(sizes) %}
+        <div class="box">
+          <div class="inner" id="{{'{}'.format(j*sizes+(i+1))}}" onclick="playgame(this.id)"></div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+  var game = {
+    user: '', // for symbol
+    computer: '', // for symbol
+    currentPlayer: '',
+    moves: 1,
+  };
+
+// Check which symbol to assign for user and comp
+  sym = "{{symbol}}";
+  if (sym === 'X') {
+    game.user = 'X';
+    game.computer = 'O';
+  }
+  else if (sym === 'O') {
+    game.user = 'O';
+    game.computer = 'X';
+  }
+  // symbol is O then computer starts first
+  if (sym === 'O') {
+    compmove();
+  }
+  setCurrPl('user');
+
+  function playgame(id){
+    $("#" + id).html(game.user);
+    //alert($('#' + id).html());
+    $('#' + id).removeAttr('onclick'); // i think this should be id instead of xy
+    game.moves++;
+    console.log(game.moves);
+   //if (game.moves >= 5) {
+   //  gamestatus()
+   //}
+    compmove();
+  }
+
+  function compmove() {
+    var x;
+    while (true && game.moves <= {{sizes}}**2) {
+    x = String(Math.floor(Math.random() * {{sizes}}**2) + 1);
+
+    let validmove = $('#' + x).html();
+    console.log(validmove);
+      if (validmove == "") {
+        $("#" + x).html(game.computer);
+        $('#' + x).removeAttr('onclick');
+        game.moves++;
+        console.log(game.moves);
+        break;
+      }
+      else {
+        console.log('invalid move: ' + x + ", "+ validmove);
+      }
+    }
+  }
+  function gamestatus(id) {
+    for (i = 1;i++;i <= sizes) {
+      for (j = 1;i++; j <= sizes) {
+
+        //Build the query by getting content of each IDs per row & col
+        //Input the query into another function that checks whether the html content is all equal, returns False if not, Return symbol if all equal
+        // If true, break then declare winner (maybe another function call)
+      }
+    }
+    for lkdjdlk for dia
+  }
+</script>
+
+{% endblock %}
+
+For id label: {{"{}{}".format(j+1,i+1)}}
+
+y = Math.floor(Math.random() * {{sizes}}) + 1;
+
+xy = String(x) + String(y); // will return number value of xy, eg 13
