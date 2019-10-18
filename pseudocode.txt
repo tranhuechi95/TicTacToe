@@ -9,20 +9,27 @@ we can have 2 functions: to check for 3x3 and the rest
 
 Javascript
 if {{sizes}} > 3 {
-    gamestatus(4, symbol)
+    gamestatus4(id)
 }
 else {
-    gamestatus(3, symbol)
+    gamestatus3(id )
 }
 
 Inside gamestatus(), we need the following things:
-1) To query all the adjacent cells to check for winning
-2) Query for the content of those cells for comparison
-3) When wining is confirmed-> break
-4) Return true or false and pass the symbol to the message function
-5) Have a message() function to display the result
+1) To query all the adjacent cells to check for winning - done
+2) Query for the content of those cells for comparison - done
+3) When wining is confirmed-> STOP THE GAME
+4) Return true or false and pass the symbol to the message function - done
+5) Have a message() function to display the result - not yet!
+
 
 
 Inside message(), it will take in the symbol to show who win/lose
 message(true,sym)
 
+
+
+
+Need to think of when to continue the game and check or to declare "Draw!"
+if game.move > {{sizes**2}} -> declare "Draw"
+else continue the games.
