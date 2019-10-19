@@ -35,7 +35,6 @@ def create_app(test_config=None):
     def startgame():
         """User to select the size of the grid"""
         if request.method == "POST":
-            "TODO"
             sizes = int(request.form.get("size"))
             symbol = request.form.get("symbol")
             return render_template("grid.html", sizes = sizes, symbol = symbol)
