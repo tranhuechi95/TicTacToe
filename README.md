@@ -27,11 +27,13 @@ Commit this change as an isolated commit and push to github.
 
 This activates all the packages in your `tictactoe_env`.
 
+- Allow the app's script to be run as a binary
+
+		chmod +x RunApp.sh
+
 - Run the application for MacOS or Linux:
 
-		export FLASK_APP=app
-		export FLASK_ENV=development
-		flask run
+		./RunApp.sh
 
 For Windows, please take a look at this [link](https://flask.palletsprojects.com/en/1.1.x/tutorial/factory/)
 
