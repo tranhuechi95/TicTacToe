@@ -51,49 +51,55 @@ if ({{sizes}} == 3) {
 }
 
 var game = {
-  user: '', // for symbol
-  computer: '', // for symbol
-  moves: 0,
+    user: '', // for symbol
+    computer: '', // for symbol
+    moves: 0,
 };
 
 // Check which symbol to assign for user and comp
 sym = "{{symbol}}";
 if (sym == 'X') {
-  game.user = 'X';
-  game.computer = 'O';
+    game.user = 'X';
+    game.computer = 'O';
+     // declare difficulty level
+    console.log("This is Hard level!")
 }
 else if (sym == 'O') {
-  game.user = 'O';
-  game.computer = 'X';
+    game.user = 'O';
+    game.computer = 'X';
+    // declare difficulty level
+    console.log("This is Hard level!")
 }
 // symbol is O then computer starts first
 if (sym == 'O') {
-  compmove();
-  console.log("PC starts!");
+    compmove();
+    console.log("PC starts!");
+    // declare difficulty level
+    console.log("This is Hard level!")
 }
 
 var boardSize = {{sizes**2}};
 
 function playgame(id){
-  // user click
-  // 1. user action appear, increase game.moves -> disallow click into that square
-  // 2. evaluate game status
-  // 2a. if someone win
-  //     declare winner
-  //     make all buttons unclickable
-  // 2b. else
-  //     if all squares are filled
-  //        inform draw
-  //    else
-  //        computer action
+    // user click
+    // 1. user action appear, increase game.moves -> disallow click into that square
+    // 2. evaluate game status
+    // 2a. if someone win
+    //     declare winner
+    //     make all buttons unclickable
+    // 2b. else
+    //     if all squares are filled
+    //        inform draw
+    //    else
+    //        computer action
 
-  $("#" + id).html(game.user);
-  $('#' + id).removeAttr('onclick');
-  game.moves++;
-  console.log("Number of moves so far: ", game.moves);
-  let status = gamestatus(id); // [true,symbol] if win, else [false, ""]
-  console.log("Game status for user:", status);
-  if (status[0]) {
+    $("#" + id).html(game.user);
+    $('#' + id).removeAttr('onclick');
+    game.moves++;
+    console.log("Number of moves so far: ", game.moves);
+    let status = gamestatus(id); // [true,symbol] if win, else [false, ""]
+    console.log("Game status for user:", status);
+    if (status[0]) {
     // if someone wins
     winmessage(status[1]);
     // alert((winningSymbol == game.user ? 'User' : 'Bot') + ' wins the game!!!!');
@@ -103,73 +109,144 @@ function playgame(id){
         currElem.removeAttr('onclick');
       }
     }
-  } else {
-    // no one has won yet, check to see if all squares are filled (i.e. game.moves is 9)
-    if (game.moves == boardSize) {
-      if ({{sizes}} == 3) {
-      document.getElementById('win3').style.display = 'none';
-      } else {
-        document.getElementById('win4_10').style.display = 'none'
-      }
-        document.getElementById('draw').style.display = 'block';
-
     } else {
-      setTimeout(compmove,1000);
+    // no one has won yet, check to see if all squares are filled (i.e. game.moves is 9)
+        if (game.moves == boardSize) {
+            if ({{sizes}} == 3) {
+                document.getElementById('win3').style.display = 'none';
+            } else {
+            document.getElementById('win4_10').style.display = 'none'
+            }
+        document.getElementById('draw').style.display = 'block';
+        } else {
+        setTimeout(compmove,1000);
+        }
     }
-  }
 }
 
 function compmove() {
-  // 1. generate id for computer to move
-  // 2. check whether the square with that id is empty
-  // 3. if empty -> fill that square with game.computer -> disallow click into that square
-  // 4. else -> generate again
-  // 5. evaluate gamestatus
-  // 5a. if someone wins
-  //      declare winner
-  //      make all empty buttons unclickable
-  // 5b. else
-  //    if all squares are filled
-  //      declare draw
-  //    else
-  //      back to user action -> do nothing
+    // 1. loop through all possible id for the computer
+    // 2. check whether the square with that id is empty
+    // 3. if empty -> run minimax -> return the id to take
+    // 4. fill that square with the generated id with game.computer -> disallow click into that square
+    // 5. evaluate gamestatus
+    // 5a. if someone wins
+    //      declare winner
+    //      make all empty buttons unclickable
+    // 5b. else
+    //    if all squares are filled
+    //      declare draw
+    //    else
+    //      back to user action -> do nothing
 
-  var x;
-  while (game.moves <= {{sizes**2}}) { // why cannot use boardSize
-  x = String(Math.floor(Math.random() * {{sizes**2}}));
-  let validmove = $('#' + x).html();
-  //console.log(validmove);
-    if (validmove == "") {
-      $("#" + x).html(game.computer);
-      $('#' + x).removeAttr('onclick');
-      game.moves++;
-      break;
-    }
-  }
-  console.log("Compmove id:",x);
-  var status1 = gamestatus(x);
-  console.log("Return of gamestatus for PC:", status1);
-  if (status1[0]) {
-    winmessage(status1[1]);
-    for (var j = 0; j < boardSize; j++) {
-      currElem = $("#" + j);
-      let content = currElem.html();
-      if (content == "") {
-        currElem.removeAttr('onclick');
+    // step 1
+    let bestScore = -Infinity;
+    var move;
+    for (let i = 0; i < {{sizes**2}}; i++) {
+      let square = $('#' + i).html();
+      //  step 2 if the square is available
+      if (square == "") {
+          $('#' + i).html(game.computer);
+          let score = minimax(i, game.moves + 1, false); // step 3 // minimax(id, noOfMoves, isComp  )
+          $('#' + i).empty();
+          if (score > bestScore) {
+              bestScore = score;
+              move = i;
+          }
       }
     }
-  } else {
-    if (game.moves == boardSize) {
-      if ({{sizes}} == 3) {
-      document.getElementById('win3').style.display = 'none';
+    // step 4 Take the bestMove
+    $('#' + move).html(game.computer);
+    $('#' + move).removeAttr('onclick');
+    game.moves++;
+
+    console.log("Compmove id:",move);
+    var status1 = gamestatus(move);
+    console.log("Return of gamestatus for PC:", status1);
+    if (status1[0]) {
+        winmessage(status1[1]);
+        for (var j = 0; j < boardSize; j++) {
+            currElem = $("#" + j);
+            let content = currElem.html();
+            if (content == "") {
+                currElem.removeAttr('onclick');
+            }
+        }
     } else {
-      document.getElementById('win4_10').style.display = 'none'
+        if (game.moves == boardSize) {
+            if ({{sizes}} == 3) {
+                document.getElementById('win3').style.display = 'none';
+            } else {
+                document.getElementById('win4_10').style.display = 'none'
+            }
+            document.getElementById('draw').style.display = 'block';
+            //alert("Game is draw!");
+        }
     }
-      document.getElementById('draw').style.display = 'block';
-      //alert("Game is draw!");
-    }
-  }
 }
+
+// look up table for scores
+var scores = {
+    // convention: computer will maximise and user will minimise
+    ComputerWin: 1,
+    YouWin: -1,
+    Draw: 0,
+};
+
+function minimax(id, noOfMoves, isComp) {
+    let status = gamestatus(id); // the gamestatus will take in an id and return [1, symbol] or [0, ""]
+    let score;
+    if (status[0]) { // aka true so could be You or comp win
+        // check to see who win
+        if (status[1] == game.user) { // you win
+            score = -1;
+            return score;
+        }
+        else {
+            score = 1;
+            return score;
+        }
+    } else { // aka false => could be a tie or game is not finished
+        if (noOfMoves == boardSize) { // a tie
+            score = 0;
+            return score;
+        }
+    }
+
+    if (isComp) { // check all possible spots for comp
+        let bestScore = -Infinity;
+        for (let i = 0; i < {{sizes**2}}; i++) {
+            let square = $('#' + i).html();
+            //  if the square is available
+            if (square == "") {
+                // imagine comp's move -> need to do and undo later on
+                $("#" + i).html(game.computer);
+                let score = minimax(i, noOfMoves + 1, false); // step 3 // minimax(id, noOfMoves, isComp )
+                // undo the imagined comp's move
+                $('#' + i).empty();
+                bestScore = Math.max(score, bestScore);
+            }
+        }
+        return bestScore;
+
+    } else { // check all possible spots for user
+        let bestScore = Infinity;
+        for (let i = 0; i < {{sizes**2}}; i++) {
+            let square = $('#' + i).html();
+            //  if the square is available
+            if (square == "") {
+                // imagine human's move -> need to do and undo later on
+                $("#" + i).html(game.user);
+                let score = minimax(i, noOfMoves + 1, true); // step 3 // minimax(id, noOfMoves, isComp  )
+                // undo the imagined human's move
+                $('#' + i).empty();
+                bestScore = Math.min(score, bestScore);
+            }
+        }
+        return bestScore;
+    }
+}
+
 
   // z is the id of the cell
 function gamestatus(id) {
@@ -209,7 +286,7 @@ function gamestatus(id) {
     // console.log("Return of checkcontent: ", check);
     // console.log("check[0]:",check[0])
     if (check[0] == true) {// when there is a winning combination
-      console.log("flag = 1");
+      //console.log("flag = 1");
       return [1,check[1]];
       // immediately return,stop the checkcontent for other combination (for loop)
 
@@ -270,7 +347,7 @@ function checkcontent(query) { // for query in queries
 	//console.log("Check content:",val);// list values inside
 	//console.log(query); // list query
 
-  result = val.reduce(function(n,m) { // check from left to right, one pair at a time
+    result = val.reduce(function(n,m) { // check from left to right, one pair at a time
 		if (n === m) {
 			return n; // Carries over the matched symbol
 		}

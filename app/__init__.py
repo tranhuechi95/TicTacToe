@@ -26,25 +26,35 @@ def create_app(test_config=None):
         pass
 
     # a simple page that says hello
-    @app.route('/')
+    @app.route('/', methods =["GET", "POST"])
     def index():
-        "TODO"
-        return render_template("index.html")
-
-    @app.route('/startgame', methods =["GET", "POST"])
-    def startgame():
         """User to select the size of the grid"""
         if request.method == "POST":
-            "TODO"
             sizes = int(request.form.get("size"))
             symbol = request.form.get("symbol")
-            return render_template("grid.html", sizes = sizes, symbol = symbol)
+            difficulty = request.form.get("difficulty")
+            if difficulty == "Hard":
+                return render_template("gridDifficult.html", sizes = sizes, symbol = symbol)
+            else:
+                return render_template("grid.html", sizes = sizes, symbol = symbol)
 
         else:
             sizes = [3,4,5,6,7,8,9,10]
             return render_template("startgame.html", sizes = sizes)
 
+    @app.route('/startgame', methods =["GET", "POST"])
+    def startgame():
+        """User to select the size of the grid"""
+        if request.method == "POST":
+            sizes = int(request.form.get("size"))
+            symbol = request.form.get("symbol")
+            difficulty = request.form.get("difficulty")
+            if difficulty == "Hard":
+                return render_template("gridDifficult.html", sizes = sizes, symbol = symbol)
+            else:
+                return render_template("grid.html", sizes = sizes, symbol = symbol)
 
-
-
+        else:
+            sizes = [3,4,5,6,7,8,9,10]
+            return render_template("startgame.html", sizes = sizes)
     return app

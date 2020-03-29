@@ -53,16 +53,17 @@ main img
     height: 80vw;
     max-height: 60vh;
     font-size: 1rem;
-    padding: 40px;
+    padding: 60px;
 }
 .row {
     display: flex;
 }
 .box {
-    background: tomato;
+    background: bisque;
     margin: 5px;
-    color: white;
+    color: black;
     font-weight: bold;
+    font-size: 50px;
     flex: 1 0 auto;
     position: relative;
 }
