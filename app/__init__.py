@@ -37,7 +37,7 @@ def create_app(test_config=None):
                 if sizes == 3:
                     return render_template("gridDifficult.html", sizes = sizes, symbol = symbol)
                 else:
-                    return render_template("gridDifficultOthers.html", sizes = sizes, symbol = symbol)
+                    return render_template("testDifficultOthers.html", sizes = sizes, symbol = symbol)
             else:
                 return render_template("grid.html", sizes = sizes, symbol = symbol)
 
@@ -56,7 +56,7 @@ def create_app(test_config=None):
                 if sizes == 3:
                     return render_template("gridDifficult.html", sizes = sizes, symbol = symbol)
                 else:
-                    return render_template("gridDifficultOthers.html", sizes = sizes, symbol = symbol)
+                    return render_template("testDifficultOthers.html", sizes = sizes, symbol = symbol)
             else:
                 return render_template("grid.html", sizes = sizes, symbol = symbol)
 
