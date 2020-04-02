@@ -18,7 +18,7 @@ else {
 Inside gamestatus(), we need the following things:
 1) To query all the adjacent cells to check for winning - done
 2) Query for the content of those cells for comparison - done
-3) When wining is confirmed-> STOP THE GAME
+3) When wining is confirmed-> STOP THE GAME -> removeAttr of all the emtpy cells
 4) Return true or false and pass the symbol to the message function - done
 5) Have a message() function to display the result - not yet!
 
