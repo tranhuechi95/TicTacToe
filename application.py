@@ -35,7 +35,7 @@ def index():
 
     else:
         sizes = [3,4,5,6,7,8,9,10]
-        return render_template("startgame.html", sizes = sizes)
+        return render_template("selectgame.html", sizes = sizes)
 
 @application.route('/selectgame', methods =["GET", "POST"])
 def selectgame():
@@ -48,13 +48,13 @@ def selectgame():
             if sizes == 3:
                 return render_template("gridDifficult.html", sizes = sizes, symbol = symbol)
             else:
-                return render_template("testDifficultOthers.html", sizes = sizes, symbol = symbol)
+                return render_template("gridDifficultOthers.html", sizes = sizes, symbol = symbol)
         else:
             return render_template("grid.html", sizes = sizes, symbol = symbol)
 
     else:
-        sizes = [3,4,5,6,7,8,9,10]
-        return render_template("startgame.html", sizes = sizes)
+        sizes = [3,4,5,6]
+        return render_template("selectgame.html", sizes = sizes)
 
 if __name__ == "__main__":
     application.run()

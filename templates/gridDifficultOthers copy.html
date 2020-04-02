@@ -16,7 +16,7 @@
         </div>
       {% endfor %}
     </div>
-  {% endfor %}
+    {% endfor %}
 </div>
 
 <div id="win3">
@@ -39,9 +39,9 @@
   <h3><p>You have lost the game!</p></h3>
 </div>
 
-<div id="restart" class="container-fluid">
-  <button type="reset" class="btn btn-success">Restart</button>
-</div>
+<form id="restart" class="container-fluid">
+  <button type="reset" class="btn btn-success" onclick="restartGame()">Restart</button>
+</form>
 
 <script>
 document.getElementById('draw').style.display = 'none';
@@ -67,23 +67,41 @@ if (sym == 'X') {
     game.user = 'X';
     game.computer = 'O';
      // declare difficulty level
-    console.log("This is Hard level 5!")
+    console.log("This is Hard level test!")
 }
 else if (sym == 'O') {
     game.user = 'O';
     game.computer = 'X';
     // declare difficulty level
-    console.log("This is Hard level 5!")
+    console.log("This is Hard level test!")
 }
 // symbol is O then computer starts first
 if (sym == 'O') {
     compmove();
     console.log("PC starts!");
     // declare difficulty level
-    console.log("This is Hard level 5!")
+    console.log("This is Hard level test!")
 }
 
 var boardSize = sizes*sizes;
+
+function restartGame() {
+  for (let i = 0; i < boardSize; i++) {
+    $("#" + i).empty();
+    document.getElementById(i).onclick = () => playgame(i);
+  }
+  game.moves = 0;
+  document.getElementById('win4_10').style.display = 'block';
+  document.getElementById('win3').style.display = 'block';
+  if (sizes == 3) {
+    document.getElementById('win4_10').style.display = 'none';
+  } else {
+    document.getElementById('win3').style.display = 'none';
+  }
+  document.getElementById('draw').style.display = 'none';
+  document.getElementById('win_user').style.display = 'none';
+  document.getElementById('win_comp').style.display = 'none';
+}
 
 function playgame(id){
     // user click
@@ -124,7 +142,7 @@ function playgame(id){
             }
         document.getElementById('draw').style.display = 'block';
         } else {
-        setTimeout(compmove,100);
+        setTimeout(compmove,300);
         }
     }
 }
@@ -160,7 +178,7 @@ function compmove() {
         //  step 2 if the square is available
         if (square == "") {
             $('#' + i).html(game.computer);
-            let score = minimax(i, game.moves + 1, 4, -Infinity, Infinity, false); // step 3 // minimax(id, noOfMoves, isComp  )
+            let score = minimax(i, game.moves + 1, 3, -Infinity, Infinity, false); // step 3 // minimax(id, noOfMoves, isComp  )
             $('#' + i).empty();
             if (score > bestScore) {
                 bestScore = score;
@@ -231,12 +249,12 @@ function minimax(id, noOfMoves, depth, alpha, beta, isComp) {
     if (status[0]) { // Game ends with a winner
         // check to see who win
         if (status[1] == game.user) { // you win
-            let changeWin = change -10000 - depth;
+            let changeWin = change -10000 + depth;
             score += changeWin;
             return score;
         }
         else {
-            let changeWin = 10000 + change;
+            let changeWin = 10000 + change + depth;
             score += changeWin;
             return score;
         }
@@ -343,7 +361,7 @@ function gamestatus(id) {
     }
     //continues to check
   }
-  return [0,"", check[2], totalPlus, totalMinus]; // no winning combination found
+  return [0,"", totalPlus, totalMinus]; // no winning combination found
 }
 
 function filter(queries) {
@@ -425,7 +443,7 @@ function checkcontent(query) { // for query in queries
 	  // if (countO == 3) {
 	  //   plus = countO*100 + countEmpty;
     // } else plus = countO + countEmpty;
-    plus = (countO == 3) ? (countO*100 + countEmpty) : (countO + countEmpty);
+    plus = (countEmpty != 0) ? (countO*2 + countEmpty) : 0;
 	  // if (countX == 3) {
 	  //   minus = -10;
     // }
@@ -434,7 +452,7 @@ function checkcontent(query) { // for query in queries
 	  // if (countX == 3) {
 	  //   plus = countX*100 + countEmpty;
     // } else plus = countX + countEmpty
-    plus = (countX == 3) ? (countX*100 + countEmpty) : (countX + countEmpty);
+    plus = (countEmpty != 0) ? (countX*2 + countEmpty) : 0;
 	  // if (countO == 3) {
 	  //   minus = -10;
     // }

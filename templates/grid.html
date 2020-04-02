@@ -39,12 +39,17 @@
   <h3><p>You have lost the game!</p></h3>
 </div>
 
+<form id="restart" class="container-fluid">
+  <button type="reset" class="btn btn-success" onclick="restartGame()">Restart</button>
+</form>
+
 <script>
 document.getElementById('draw').style.display = 'none';
 document.getElementById('win_user').style.display = 'none';
 document.getElementById('win_comp').style.display = 'none';
 
-if ({{sizes}} == 3) {
+var sizes = {{sizes}};
+if (sizes == 3) {
   document.getElementById('win4_10').style.display = 'none';
 } else {
   document.getElementById('win3').style.display = 'none';
@@ -72,7 +77,25 @@ if (sym == 'O') {
   console.log("PC starts!");
 }
 
-var boardSize = {{sizes**2}};
+var boardSize = sizes*sizes;
+
+function restartGame() {
+  for (let i = 0; i < boardSize; i++) {
+    $("#" + i).empty();
+    document.getElementById(i).onclick = () => playgame(i);
+  }
+  game.moves = 0;
+  document.getElementById('win4_10').style.display = 'block';
+  document.getElementById('win3').style.display = 'block';
+  if (sizes == 3) {
+    document.getElementById('win4_10').style.display = 'none';
+  } else {
+    document.getElementById('win3').style.display = 'none';
+  }
+  document.getElementById('draw').style.display = 'none';
+  document.getElementById('win_user').style.display = 'none';
+  document.getElementById('win_comp').style.display = 'none';
+}
 
 function playgame(id){
   // user click
@@ -106,7 +129,7 @@ function playgame(id){
   } else {
     // no one has won yet, check to see if all squares are filled (i.e. game.moves is 9)
     if (game.moves == boardSize) {
-      if ({{sizes}} == 3) {
+      if (sizes == 3) {
       document.getElementById('win3').style.display = 'none';
       } else {
         document.getElementById('win4_10').style.display = 'none'
@@ -135,8 +158,8 @@ function compmove() {
   //      back to user action -> do nothing
 
   var x;
-  while (game.moves <= {{sizes**2}}) { // why cannot use boardSize
-  x = String(Math.floor(Math.random() * {{sizes**2}}));
+  while (game.moves <= sizes*sizes) { // why cannot use boardSize
+  x = String(Math.floor(Math.random() * sizes*sizes));
   let validmove = $('#' + x).html();
   //console.log(validmove);
     if (validmove == "") {
@@ -160,7 +183,7 @@ function compmove() {
     }
   } else {
     if (game.moves == boardSize) {
-      if ({{sizes}} == 3) {
+      if (sizes == 3) {
       document.getElementById('win3').style.display = 'none';
     } else {
       document.getElementById('win4_10').style.display = 'none'
@@ -173,17 +196,17 @@ function compmove() {
 
   // z is the id of the cell
 function gamestatus(id) {
-  var x = id % {{sizes}};
-  var y = Math.floor(id / {{sizes}});
+  var x = id % sizes;
+  var y = Math.floor(id / sizes);
   var queries = [];
   // check for winning criteria
-  if ({{sizes}} == 3) {
+  if (sizes == 3) {
     var wincriteria = 3;
   } else {
     var wincriteria = 4;
   }
   winMove = wincriteria - 1;
-  for (var i = 0; i < {{sizes}}; i++) {
+  for (var i = 0; i < sizes; i++) {
   	var horizontal = [];
   	var vertical = [];
   	var dia1 = [];
@@ -220,7 +243,7 @@ function gamestatus(id) {
 }
 
 function filter(queries) {
-  var boundary = {{sizes}} - 1;
+  var boundary = sizes - 1;
   //console.log("Boundary is ", boundary);
 	var discard_indices = [];
 	for (var ii = 0; ii < queries.length; ii ++) {
@@ -252,7 +275,7 @@ function idconvert(queries) {
 	for (var i = 0; i < queries.length; i ++) {
 		var queryid = [];
 		for (var j = 0; j < queries[i].length; j ++){
-			queryid.push(queries[i][j][0] + queries[i][j][1] * {{sizes}});
+			queryid.push(queries[i][j][0] + queries[i][j][1] * sizes);
 		}
 		gridid.push(queryid);
 	}
@@ -291,7 +314,7 @@ function winmessage(symbol) {
   if (symbol == game.user) {
     console.log("You win!");
     document.getElementById('win_user').style.display = 'block';
-    if ({{sizes}} == 3) {
+    if (sizes == 3) {
       document.getElementById('win3').style.display = 'none';
     } else {
       document.getElementById('win4_10').style.display = 'none'
@@ -299,7 +322,7 @@ function winmessage(symbol) {
   } else {
     console.log("You lose!");
     document.getElementById('win_comp').style.display = 'block';
-    if ({{sizes}} == 3) {
+    if (sizes == 3) {
       document.getElementById('win3').style.display = 'none';
     } else {
       document.getElementById('win4_10').style.display = 'none'
