@@ -117,7 +117,8 @@ function playgame(id){
     //        computer action
 
     $("#" + id).html(game.user);
-    $('#' + id).removeAttr('onclick');
+    // $('#' + id).removeAttr('onclick');
+    $('#' + id).prop("onclick", null).off("click");
     game.moves++;
     console.log("Number of moves so far: ", game.moves);
     let status = gamestatus(id); // [true,symbol] if win, else [false, ""]
@@ -129,7 +130,8 @@ function playgame(id){
     for (var i = 0; i < boardSize; i++) {
       let currElem = $("#" + i);
       if (currElem.html() == "") {
-        currElem.removeAttr('onclick');
+        // currElem.removeAttr('onclick');
+        currElem.prop("onclick", null).off("click");
       }
     }
     } else {
@@ -192,7 +194,8 @@ function compmove() {
 
     // step 4 Take the bestMove
     $('#' + move).html(game.computer);
-    $('#' + move).removeAttr('onclick');
+    // $('#' + move).removeAttr('onclick');
+    $('#' + move).prop("onclick", null).off("click");
     game.moves++;
 
     console.log("Compmove id:",move);
@@ -204,7 +207,8 @@ function compmove() {
             currElem = $("#" + j);
             let content = currElem.html();
             if (content == "") {
-                currElem.removeAttr('onclick');
+                // currElem.removeAttr('onclick');
+                currElem.prop("onclick", null).off("click");
             }
         }
     } else {

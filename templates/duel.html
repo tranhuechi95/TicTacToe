@@ -31,12 +31,12 @@
   <h3><p>Game ends with a draw</p></h3>
 </div>
 
-<div id="win_user">
-  <h3><p>You have won the game!</p></h3>
+<div id="win_user_one">
+  <h3><p>First player won the game!</p></h3>
 </div>
 
-<div id="win_comp">
-  <h3><p>You have lost the game!</p></h3>
+<div id="win_user_two">
+  <h3><p>Second player won the game!</p></h3>
 </div>
 
 <form id="restart" class="container-fluid">
@@ -45,8 +45,8 @@
 
 <script>
 document.getElementById('draw').style.display = 'none';
-document.getElementById('win_user').style.display = 'none';
-document.getElementById('win_comp').style.display = 'none';
+document.getElementById('win_user_one').style.display = 'none';
+document.getElementById('win_user_two').style.display = 'none';
 
 var sizes = {{sizes}};
 if (sizes == 3) {
@@ -56,25 +56,25 @@ if (sizes == 3) {
 }
 
 var game = {
-  user: '', // for symbol
-  computer: '', // for symbol
+  user_one: '', // for symbol
+  user_two: '', // for symbol
   moves: 0,
 };
 
 // Check which symbol to assign for user and comp
 sym = "{{symbol}}";
 if (sym == 'X') {
-  game.user = 'X';
-  game.computer = 'O';
+  game.user_one = 'X';
+  game.user_two = 'O';
 }
 else if (sym == 'O') {
-  game.user = 'O';
-  game.computer = 'X';
+  game.user_one = 'O';
+  game.user_two = 'X';
 }
 // symbol is O then computer starts first
 if (sym == 'O') {
   compmove();
-  console.log("PC starts!");
+  console.log("User one starts!");
 }
 
 var boardSize = sizes*sizes;
@@ -93,8 +93,8 @@ function restartGame() {
     document.getElementById('win3').style.display = 'none';
   }
   document.getElementById('draw').style.display = 'none';
-  document.getElementById('win_user').style.display = 'none';
-  document.getElementById('win_comp').style.display = 'none';
+  document.getElementById('win_user_one').style.display = 'none';
+  document.getElementById('win_user_two').style.display = 'none';
 }
 
 function playgame(id){
@@ -109,10 +109,13 @@ function playgame(id){
   //        inform draw
   //    else
   //        computer action
-
-  $("#" + id).html(game.user);
-  // $('#' + id).removeAttr('onclick');
-  $('#' + id).prop("onclick", null).off("click");
+    if (game.moves % 2 == 0) {
+        $("#" + id).html(game.user_one);
+    } else {
+        $("#" + id).html(game.user_two);
+    }
+//   $('#' + id).removeAttr('onclick');
+    $('#' + id).prop("onclick", null).off("click");
   game.moves++;
   console.log("Number of moves so far: ", game.moves);
   let status = gamestatus(id); // [true,symbol] if win, else [false, ""]
@@ -138,62 +141,6 @@ function playgame(id){
       }
         document.getElementById('draw').style.display = 'block';
 
-    } else {
-      setTimeout(compmove,1000);
-    }
-  }
-}
-
-function compmove() {
-  // 1. generate id for computer to move
-  // 2. check whether the square with that id is empty
-  // 3. if empty -> fill that square with game.computer -> disallow click into that square
-  // 4. else -> generate again
-  // 5. evaluate gamestatus
-  // 5a. if someone wins
-  //      declare winner
-  //      make all empty buttons unclickable
-  // 5b. else
-  //    if all squares are filled
-  //      declare draw
-  //    else
-  //      back to user action -> do nothing
-
-  var x;
-  while (game.moves <= sizes*sizes) { // why cannot use boardSize
-  x = String(Math.floor(Math.random() * sizes*sizes));
-  let validmove = $('#' + x).html();
-  //console.log(validmove);
-    if (validmove == "") {
-      $("#" + x).html(game.computer);
-      // $('#' + x).removeAttr('onclick');
-      $('#' + x).prop("onclick", null).off("click");
-      game.moves++;
-      break;
-    }
-  }
-  console.log("Compmove id:",x);
-  var status1 = gamestatus(x);
-  console.log("Return of gamestatus for PC:", status1);
-  if (status1[0]) {
-    winmessage(status1[1]);
-    for (var j = 0; j < boardSize; j++) {
-      currElem = $("#" + j);
-      let content = currElem.html();
-      if (content == "") {
-        // currElem.removeAttr('onclick');
-        currElem.prop("onclick", null).off("click");
-      }
-    }
-  } else {
-    if (game.moves == boardSize) {
-      if (sizes == 3) {
-      document.getElementById('win3').style.display = 'none';
-    } else {
-      document.getElementById('win4_10').style.display = 'none'
-    }
-      document.getElementById('draw').style.display = 'block';
-      //alert("Game is draw!");
     }
   }
 }
@@ -315,17 +262,17 @@ function checkcontent(query) { // for query in queries
 }
 
 function winmessage(symbol) {
-  if (symbol == game.user) {
-    console.log("You win!");
-    document.getElementById('win_user').style.display = 'block';
+  if (symbol == game.user_one) {
+    console.log("User one wins!");
+    document.getElementById('win_user_one').style.display = 'block';
     if (sizes == 3) {
       document.getElementById('win3').style.display = 'none';
     } else {
       document.getElementById('win4_10').style.display = 'none'
     }
   } else {
-    console.log("You lose!");
-    document.getElementById('win_comp').style.display = 'block';
+    console.log("User two wins!");
+    document.getElementById('win_user_two').style.display = 'block';
     if (sizes == 3) {
       document.getElementById('win3').style.display = 'none';
     } else {
@@ -335,11 +282,4 @@ function winmessage(symbol) {
 }
 </script>
 
-
 {% endblock %}
-
-For id label: {{"{}{}".format(j+1,i+1)}}
-
-y = Math.floor(Math.random() * {{sizes}}) + 1;
-
-xy = String(x) + String(y); // will return number value of xy, eg 13
