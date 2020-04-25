@@ -17,17 +17,20 @@ var game = {
 
 // Check which symbol to assign for user and comp
 sym = "{{symbol}}";
+var userTurns = [];
 if (sym == 'X') {
     game.user = 'X';
     game.computer = 'O';
      // declare difficulty level
-    console.log("This is Hard level!")
+    console.log("This is Hard level!");
+    userTurns = [0,2,4,6,8];
 }
 else if (sym == 'O') {
     game.user = 'O';
     game.computer = 'X';
     // declare difficulty level
-    console.log("This is Hard level!")
+    console.log("This is Hard level!");
+    userTurns = [1,3,5,7,9];
 }
 // symbol is O then computer starts first
 if (sym == 'O') {
@@ -70,17 +73,7 @@ function playgame(id){
     //    else
     //        computer action
 
-    var userTurn = false;
-    if (game.user == "X") {
-      var userTurns = [0,2,4,6,8]
-      userTurn = userTurns.includes(game.moves);
-      console.log("implementing userTurn check");
-    } else if (game.user == "O") {
-      var userTurns = [1,3,5,7,9]
-      userTurn = userTurns.includes(game.moves);
-      console.log("implementing userTurn check");
-    }
-
+    var userTurn = userTurns.includes(game.moves);
     if (userTurn) {
       $("#" + id).html(game.user);
       // $('#' + id).removeAttr('onclick');

@@ -17,17 +17,26 @@ var game = {
 
 // Check which symbol to assign for user and comp
 sym = "{{symbol}}";
+var boardSize = sizes*sizes;
+var userTurns = [];
 if (sym == 'X') {
     game.user = 'X';
     game.computer = 'O';
      // declare difficulty level
-    console.log("This is Hard level test!")
+    console.log("This is Hard level test!");
+    for (var i = 0; i< boardSize; i+= 2) {
+      userTurns.push(i); // [0,2,4,6,8,10,12,14]
+  } 
 }
 else if (sym == 'O') {
     game.user = 'O';
     game.computer = 'X';
     // declare difficulty level
-    console.log("This is Hard level test!")
+    console.log("This is Hard level test!");
+    //[1,3,5,7,9,11,13,15]
+    for (var i = 1; i< boardSize; i+=2) {
+      userTurns.push(i);
+    }
 }
 // symbol is O then computer starts first
 if (sym == 'O') {
@@ -36,8 +45,6 @@ if (sym == 'O') {
     // declare difficulty level
     console.log("This is Hard level test!")
 }
-
-var boardSize = sizes*sizes;
 
 function restartGame() {
   for (let i = 0; i < boardSize; i++) {
@@ -72,24 +79,7 @@ function playgame(id){
 
     // user needs to wait for computer after user's move
     // if user is X, plays at 0, 2, 4, 6, 8 else 1,3,5,7,9
-    var userTurn = false;
-    if (game.user == "X") {
-      var userTurns = [];
-      for (var i = 0; i< boardSize; i+= 2) {
-          userTurns.push(i); // [0,2,4,6,8,10,12,14]
-      }  
-      userTurn = userTurns.includes(game.moves);
-      console.log("implementing userTurn check");
-    } else if (game.user == "O") {
-      var userTurns = [];
-      //[1,3,5,7,9,11,13,15]
-      for (var i = 1; i< boardSize + 1; i+=2) {
-          userTurns.push(i);
-      }
-      userTurn = userTurns.includes(game.moves);
-      console.log("implementing userTurn check");
-    }
-
+    var userTurn = userTurns.includes(game.moves);
     if (userTurn) {
       $("#" + id).html(game.user);
       // $('#' + id).removeAttr('onclick');

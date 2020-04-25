@@ -17,21 +17,29 @@ var game = {
 
 // Check which symbol to assign for user and comp
 sym = "{{symbol}}";
+// assign userTurns to be odd or even
+var userTurns = [];
+var boardSize = sizes*sizes;
+
 if (sym == 'X') {
   game.user = 'X';
   game.computer = 'O';
+  for (var i = 0; i < boardSize; i+= 2) {
+    userTurns.push(i);
+  }
 }
 else if (sym == 'O') {
   game.user = 'O';
   game.computer = 'X';
+  for (var i = 1; i < boardSize; i+=2) {
+    userTurns.push(i);
+  }
 }
 // symbol is O then computer starts first
 if (sym == 'O') {
   compmove();
   console.log("PC starts!");
 }
-
-var boardSize = sizes*sizes;
 
 function restartGame() {
   for (let i = 0; i < boardSize; i++) {
@@ -64,17 +72,8 @@ function playgame(id){
   //    else
   //        computer action
 
-  var userTurn = false;
-    if (game.user == "X") {
-      var userTurns = [0,2,4,6,8]
-      userTurn = userTurns.includes(game.moves);
-      console.log("implementing userTurn check");
-    } else if (game.user == "O") {
-      var userTurns = [1,3,5,7,9]
-      userTurn = userTurns.includes(game.moves);
-      console.log("implementing userTurn check");
-    }
-  
+  var userTurn = userTurns.includes(game.moves);
+  console.log("implementing userTurn check");
   if (userTurn) {
     $("#" + id).html(game.user);
     // $('#' + id).removeAttr('onclick');
