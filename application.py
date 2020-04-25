@@ -57,7 +57,7 @@ def selectgame():
             return render_template("grid.html", sizes = sizes, symbol = symbol)
 
     else:
-        sizes = [3,4,5,6]
+        sizes = [3,4,5]
         return render_template("selectgame.html", sizes = sizes)
 
 if __name__ == "__main__":
