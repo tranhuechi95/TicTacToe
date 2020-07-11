@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Game
+{% endblock %}
+
+{% block main %}
+<h2>Let's start!</h2>
+
+<div class="grid">
+  {% for j in range(sizes) %}
+    <div class="row">
+      {% for i in range(sizes) %}
+        <div class="box">
+          <div class="inner" id="{{'{}'.format(j*sizes+(i))}}" onclick="playgame(this.id)"></div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+<div id="win3">
+  <h4><p>Get 3 in a row to win</p></h4>
+</div>
+
+<div id="win4_10">
+  <h4><p>Get 4 in a row to win</p></h4>
+</div>
+
+<div id="draw">
+  <h3><p>Game ends with a draw</p></h3>
+</div>
+
+<div id="win_user_one">
+  <h3><p>First player won the game!</p></h3>
+</div>
+
+<div id="win_user_two">
+  <h3><p>Second player won the game!</p></h3>
+</div>
+
+<form id="restart" class="container-fluid">
+  <button type="reset" class="btn btn-success" onclick="restartGame()">Restart</button>
+</form>
+
+<script type="text/javascript">
+    {% include "duel.js" %}
+</script>
+
+{% endblock %}

@@ -77,11 +77,11 @@ Let's say you want to add a feature, called A, to our code. Take the following s
 
 ### 1st Iteration
 
-Make a bot that responses to the user click.
+Make a tictactoe grid that responses to the user click.
 
 ### 2nd iteration
 
-Implement the login, register.
+Make a bot to react to user click for different levels of difficulty.
 
 ### 3rd iteration
 

@@ -1,49 +1,3 @@
-{% extends "layout.html" %}
-
-{% block title %}
-  Game
-{% endblock %}
-
-{% block main %}
-<h2>Let's start!</h2>
-
-<div class="grid">
-  {% for j in range(sizes) %}
-    <div class="row">
-      {% for i in range(sizes) %}
-        <div class="box">
-          <div class="inner" id="{{'{}'.format(j*sizes+(i))}}" onclick="playgame(this.id)"></div>
-        </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
-</div>
-
-<div id="win3">
-  <h4><p>Get 3 in a row to win</p></h4>
-</div>
-
-<div id="win4_10">
-  <h4><p>Get 4 in a row to win</p></h4>
-</div>
-
-<div id="draw">
-  <h3><p>Game ends with a draw</p></h3>
-</div>
-
-<div id="win_user">
-  <h3><p>You have won the game!</p></h3>
-</div>
-
-<div id="win_comp">
-  <h3><p>You have lost the game!</p></h3>
-</div>
-
-<div id="restart" class="container-fluid">
-  <button type="reset" class="btn btn-success">Restart</button>
-</div>
-
-<script>
 document.getElementById('draw').style.display = 'none';
 document.getElementById('win_user').style.display = 'none';
 document.getElementById('win_comp').style.display = 'none';
@@ -63,27 +17,52 @@ var game = {
 
 // Check which symbol to assign for user and comp
 sym = "{{symbol}}";
+var boardSize = sizes*sizes;
+var userTurns = [];
 if (sym == 'X') {
     game.user = 'X';
     game.computer = 'O';
      // declare difficulty level
-    console.log("This is Hard level 5!")
+    console.log("This is Hard level test!");
+    for (var i = 0; i< boardSize; i+= 2) {
+      userTurns.push(i); // [0,2,4,6,8,10,12,14]
+  } 
 }
 else if (sym == 'O') {
     game.user = 'O';
     game.computer = 'X';
     // declare difficulty level
-    console.log("This is Hard level 5!")
+    console.log("This is Hard level test!");
+    //[1,3,5,7,9,11,13,15]
+    for (var i = 1; i< boardSize; i+=2) {
+      userTurns.push(i);
+    }
 }
 // symbol is O then computer starts first
 if (sym == 'O') {
     compmove();
     console.log("PC starts!");
     // declare difficulty level
-    console.log("This is Hard level 5!")
+    console.log("This is Hard level test!")
 }
 
-var boardSize = sizes*sizes;
+function restartGame() {
+  for (let i = 0; i < boardSize; i++) {
+    $("#" + i).empty();
+    document.getElementById(i).onclick = () => playgame(i);
+  }
+  game.moves = 0;
+  document.getElementById('win4_10').style.display = 'block';
+  document.getElementById('win3').style.display = 'block';
+  if (sizes == 3) {
+    document.getElementById('win4_10').style.display = 'none';
+  } else {
+    document.getElementById('win3').style.display = 'none';
+  }
+  document.getElementById('draw').style.display = 'none';
+  document.getElementById('win_user').style.display = 'none';
+  document.getElementById('win_comp').style.display = 'none';
+}
 
 function playgame(id){
     // user click
@@ -98,34 +77,41 @@ function playgame(id){
     //    else
     //        computer action
 
-    $("#" + id).html(game.user);
-    $('#' + id).removeAttr('onclick');
-    game.moves++;
-    console.log("Number of moves so far: ", game.moves);
-    let status = gamestatus(id); // [true,symbol] if win, else [false, ""]
-    console.log("Game status for user:", status);
-    if (status[0]) {
-    // if someone wins
-    winmessage(status[1]);
-    // alert((winningSymbol == game.user ? 'User' : 'Bot') + ' wins the game!!!!');
-    for (var i = 0; i < boardSize; i++) {
-      let currElem = $("#" + i);
-      if (currElem.html() == "") {
-        currElem.removeAttr('onclick');
-      }
-    }
-    } else {
-    // no one has won yet, check to see if all squares are filled (i.e. game.moves is 9)
-        if (game.moves == boardSize) {
-            if (sizes == 3) {
-                document.getElementById('win3').style.display = 'none';
-            } else {
-            document.getElementById('win4_10').style.display = 'none'
-            }
-        document.getElementById('draw').style.display = 'block';
-        } else {
-        setTimeout(compmove,100);
+    // user needs to wait for computer after user's move
+    // if user is X, plays at 0, 2, 4, 6, 8 else 1,3,5,7,9
+    var userTurn = userTurns.includes(game.moves);
+    if (userTurn) {
+      $("#" + id).html(game.user);
+      // $('#' + id).removeAttr('onclick');
+      $('#' + id).prop("onclick", null).off("click");
+      game.moves++;
+      console.log("Number of moves so far: ", game.moves);
+      let status = gamestatus(id); // [true,symbol] if win, else [false, ""]
+      console.log("Game status for user:", status);
+      if (status[0]) {
+      // if someone wins
+        winmessage(status[1]);
+        // alert((winningSymbol == game.user ? 'User' : 'Bot') + ' wins the game!!!!');
+        for (var i = 0; i < boardSize; i++) {
+          let currElem = $("#" + i);
+          if (currElem.html() == "") {
+            // currElem.removeAttr('onclick');
+            currElem.prop("onclick", null).off("click");
+          }
         }
+      } else {
+      // no one has won yet, check to see if all squares are filled (i.e. game.moves is 9)
+          if (game.moves == boardSize) {
+              if (sizes == 3) {
+                  document.getElementById('win3').style.display = 'none';
+              } else {
+              document.getElementById('win4_10').style.display = 'none'
+              }
+          document.getElementById('draw').style.display = 'block';
+          } else {
+          setTimeout(compmove,300);
+          }
+      }
     }
 }
 
@@ -160,7 +146,7 @@ function compmove() {
         //  step 2 if the square is available
         if (square == "") {
             $('#' + i).html(game.computer);
-            let score = minimax(i, game.moves + 1, 4, -Infinity, Infinity, false); // step 3 // minimax(id, noOfMoves, isComp  )
+            let score = minimax(i, game.moves + 1, 3, -Infinity, Infinity, false); // step 3 // minimax(id, noOfMoves, isComp  )
             $('#' + i).empty();
             if (score > bestScore) {
                 bestScore = score;
@@ -174,7 +160,8 @@ function compmove() {
 
     // step 4 Take the bestMove
     $('#' + move).html(game.computer);
-    $('#' + move).removeAttr('onclick');
+    // $('#' + move).removeAttr('onclick');
+    $('#' + move).prop("onclick", null).off("click");
     game.moves++;
 
     console.log("Compmove id:",move);
@@ -186,7 +173,8 @@ function compmove() {
             currElem = $("#" + j);
             let content = currElem.html();
             if (content == "") {
-                currElem.removeAttr('onclick');
+                // currElem.removeAttr('onclick');
+                currElem.prop("onclick", null).off("click");
             }
         }
     } else {
@@ -231,12 +219,12 @@ function minimax(id, noOfMoves, depth, alpha, beta, isComp) {
     if (status[0]) { // Game ends with a winner
         // check to see who win
         if (status[1] == game.user) { // you win
-            let changeWin = change -10000 - depth;
+            let changeWin = change -10000 + depth;
             score += changeWin;
             return score;
         }
         else {
-            let changeWin = 10000 + change;
+            let changeWin = 10000 + change + depth;
             score += changeWin;
             return score;
         }
@@ -343,7 +331,7 @@ function gamestatus(id) {
     }
     //continues to check
   }
-  return [0,"", check[2], totalPlus, totalMinus]; // no winning combination found
+  return [0,"", totalPlus, totalMinus]; // no winning combination found
 }
 
 function filter(queries) {
@@ -425,7 +413,7 @@ function checkcontent(query) { // for query in queries
 	  // if (countO == 3) {
 	  //   plus = countO*100 + countEmpty;
     // } else plus = countO + countEmpty;
-    plus = (countO == 3) ? (countO*100 + countEmpty) : (countO + countEmpty);
+    plus = (countEmpty != 0) ? (countO*2 + countEmpty) : 0;
 	  // if (countX == 3) {
 	  //   minus = -10;
     // }
@@ -434,7 +422,7 @@ function checkcontent(query) { // for query in queries
 	  // if (countX == 3) {
 	  //   plus = countX*100 + countEmpty;
     // } else plus = countX + countEmpty
-    plus = (countX == 3) ? (countX*100 + countEmpty) : (countX + countEmpty);
+    plus = (countEmpty != 0) ? (countX*2 + countEmpty) : 0;
 	  // if (countO == 3) {
 	  //   minus = -10;
     // }
@@ -468,13 +456,3 @@ function winmessage(symbol) {
     }
   }
 }
-</script>
-
-
-{% endblock %}
-
-For id label: {{"{}{}".format(j+1,i+1)}}
-
-y = Math.floor(Math.random() * {{sizes}}) + 1;
-
-xy = String(x) + String(y); // will return number value of xy, eg 13
